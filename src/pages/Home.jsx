@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PostCard from '../components/PostCard';
+import Header from  '../components/Header';
 import { fetchPosts, selectPosts, selectPostsStatus, selectPostsError } from '../features/posts/postsSlice';
 
 export default function Home() {
@@ -8,6 +9,7 @@ export default function Home() {
   const posts = useSelector(selectPosts);
   const status = useSelector(selectPostsStatus);
   const error = useSelector(selectPostsError);
+  const [ search, setSearch ] = useState("");
 
   useEffect(() => {
     if (status === 'idle') {
@@ -20,6 +22,7 @@ export default function Home() {
 
   return (
     <div>
+      <Header search={search} setSearch={setSearch} />
       {posts.map(post => (
         <PostCard
           key={post.id}
