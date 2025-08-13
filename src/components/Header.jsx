@@ -1,6 +1,6 @@
 import '../styles/header.css';
 
-function Header({ search, setSearch }) {
+function Header({ search, setSearch, handleKeyPress }) {
 
     return (
         <header className="header">
@@ -16,7 +16,7 @@ function Header({ search, setSearch }) {
 
             <div className="title-container">
                 <h2>
-                Reddit<span>Lite</span>
+                    Reddit<span>Lite</span>
                 </h2>
             </div>
 
@@ -29,6 +29,7 @@ function Header({ search, setSearch }) {
                     placeholder="Search"
                     value={search}
                     onChange={e => setSearch(e.target.value)}
+                    onKeyDown={handleKeyPress}
                 />
             </div>
         </header>
