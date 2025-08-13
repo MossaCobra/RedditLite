@@ -1,7 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
-  const response = await fetch('https://www.reddit.com/r/popular.json');
+export const fetchPosts = createAsyncThunk('posts/fetchPosts', async (search) => {
+  const url = search 
+    ? `https://www.reddit.com/search.json?q=${encodeURIComponent(search)}` 
+    : 'https://www.reddit.com/r/popular.json';
+    
+  const response = await fetch(url);
   const data = await response.json();
 
   const posts = data.data.children.map(child => {
