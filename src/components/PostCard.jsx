@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function PostCard({ title, author, subreddit, imageUrl, num_comments, score, created_utc, permalink }) {
+function PostCard({ title, author, subreddit, imageUrl, num_comments, score, created_utc, permalink, onCommentsClick }) {
   const date = new Date(created_utc * 1000).toLocaleString();
 
   const [currentScore, setCurrentScore] = useState(score);
@@ -101,15 +101,20 @@ function PostCard({ title, author, subreddit, imageUrl, num_comments, score, cre
         </div>
 
         <div className="d-flex flex-column align-items-center" style={{ width: '70px' }}>
-          <a
-            href={`https://reddit.com${permalink}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ fontSize: '24px', textDecoration: 'none' }}
+          <button
+            onClick={onCommentsClick}
+            style={{
+              fontSize: '24px',
+              textDecoration: 'none',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: 0
+            }}
             aria-label="Comments"
           >
             {message}
-          </a>
+          </button>
           <span>{num_comments}</span>
         </div>
       </div>
