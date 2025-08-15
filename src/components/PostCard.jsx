@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function PostCard({ title, author, subreddit, imageUrl, num_comments, score, created_utc, permalink, onCommentsClick }) {
+function PostCard({ title, author, subreddit, imageUrl, num_comments, score, created_utc, permalink, selftext, onCommentsClick }) {
   const date = new Date(created_utc * 1000).toLocaleString();
 
   const [currentScore, setCurrentScore] = useState(score);
@@ -117,6 +117,10 @@ function PostCard({ title, author, subreddit, imageUrl, num_comments, score, cre
           </button>
           <span>{num_comments}</span>
         </div>
+      </div>
+
+      <div>
+        {selftext && <p>{selftext}</p>}
       </div>
 
       <div style={{ fontSize: '0.9rem', color: '#555', marginTop: '0.25rem', marginBottom: 0 }}>

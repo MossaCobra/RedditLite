@@ -23,6 +23,7 @@ export default function PostDetail() {
         score={post.score}
         created_utc={post.created_utc}
         permalink={post.permalink}
+        selftext={post.selftext ? post.selftext : "No description provided"}
       />
     </div>
   );
