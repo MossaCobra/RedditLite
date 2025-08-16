@@ -42,7 +42,7 @@ function PostCard({ title, author, subreddit, imageUrl, num_comments, score, cre
   return (
     <div
       className="border rounded p-3 mb-4 mx-auto"
-      style={{ width: '70vw', maxWidth: '900px' }}
+      style={{ width: '70vw', maxWidth: '900px', backgroundColor: 'white', marginTop: '0.5rem'}}
     >
       <div className="mb-2">
         <h4>{title}</h4>

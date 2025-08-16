@@ -12,7 +12,7 @@ function HeaderBack() {
                     className="back-btn"
                     onClick={() => navigate("/")} 
                 >
-                    ⬅️
+                ⬅️
                 </button>
             </nav>
 
