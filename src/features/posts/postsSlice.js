@@ -28,6 +28,7 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async (search) =>
       score: postData.score,
       created_utc: postData.created_utc,
       permalink: postData.permalink,
+      selftext: postData.selftext,  
     };
   });
 

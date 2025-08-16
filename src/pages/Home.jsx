@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import PostCard from '../components/PostCard';
 import Header from  '../components/Header';
@@ -6,6 +7,7 @@ import { fetchPosts, selectPosts, selectPostsStatus, selectPostsError } from '..
 
 export default function Home() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const posts = useSelector(selectPosts);
   const status = useSelector(selectPostsStatus);
   const error = useSelector(selectPostsError);
@@ -39,6 +41,7 @@ export default function Home() {
           score={post.score}
           created_utc={post.created_utc}
           permalink={post.permalink}
+          onCommentsClick={() => navigate(`/posts/${post.id}`, { state: { post } })}
         />
       ))}
     </div>
