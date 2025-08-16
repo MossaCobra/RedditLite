@@ -2,12 +2,12 @@ header {
   display: flex;
   align-items: center;
   padding: 0.75rem 1.5rem;
-  background-color: #fff;
+  background-color: white; 
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   z-index: 1000;
-  position: relative; /* needed for absolute children */
+  position: sticky; 
 }
 
 nav {
@@ -27,6 +27,7 @@ nav {
   margin: 0;
   font-weight: 700;
   font-size: 1.5rem;
+  color: #333; 
 }
 
 .title-container h2 span {
@@ -46,12 +47,13 @@ input#search {
   max-width: 400px;
   padding: 0.5rem 0.75rem;
   font-size: 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid #ffc49b; 
   border-radius: 6px;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 input#search:focus {
   outline: none;
   border-color: #ff4500;
+  box-shadow: 0 0 5px rgba(255, 69, 0, 0.4);
 }
