@@ -30,20 +30,26 @@ export default function Home() {
   return (
     <div>
       <Header search={search} setSearch={setSearch} handleKeyPress={handleKeyPress} />
-      {posts.map(post => (
-        <PostCard
-          key={post.id}
-          title={post.title}
-          author={post.author}
-          subreddit={post.subreddit}
-          imageUrl={post.imageUrl}
-          num_comments={post.num_comments}
-          score={post.score}
-          created_utc={post.created_utc}
-          permalink={post.permalink}
-          onCommentsClick={() => navigate(`/posts/${post.id}`, { state: { post } })}
-        />
-      ))}
+      {status === 'succeeded' && posts.length === 0 ? (
+        <p style={{marginTop: '2rem'}}>No Results Found</p>
+      ) : (
+        posts.map(post => (
+          <PostCard
+            key={post.id}
+            title={post.title}
+            author={post.author}
+            subreddit={post.subreddit}
+            imageUrl={post.imageUrl}
+            num_comments={post.num_comments}
+            score={post.score}
+            created_utc={post.created_utc}
+            permalink={post.permalink}
+            onCommentsClick={() =>
+              navigate(`/posts/${post.id}`, { state: { post } })
+            }
+          />
+        ))
+      )}
     </div>
   );
 }
