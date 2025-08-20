@@ -1,6 +1,6 @@
 import '../styles/header.css';
 
-function Header({ search, setSearch, handleKeyPress }) {
+function Header({ search, setSearch, handleKeyPress, onToggleSidePanel }) {
 
     return (
         <header className="header">
@@ -8,7 +8,7 @@ function Header({ search, setSearch, handleKeyPress }) {
                 <button
                 aria-label="Toggle menu"
                 className="hamburger-btn"
-                //Onclick={sidePanel}
+                onClick={onToggleSidePanel}
                 >
                 ☰
                 </button>

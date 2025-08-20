@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import PostCard from '../components/PostCard';
 import Header from  '../components/Header';
+import SidePanel from '../components/SidePanel';
 import { fetchPosts, selectPosts, selectPostsStatus, selectPostsError } from '../features/posts/postsSlice';
 
 export default function Home() {
@@ -12,6 +13,11 @@ export default function Home() {
   const status = useSelector(selectPostsStatus);
   const error = useSelector(selectPostsError);
   const [ search, setSearch ] = useState("");
+  const [ isOpen, setIsOpen ] = useState(false);
+  
+  const toggleSidePanel = () => {
+    setIsOpen(!isOpen);
+  }; 
 
   function handleKeyPress (event) {
     if (event.key === 'Enter')
@@ -29,7 +35,8 @@ export default function Home() {
 
   return (
     <div>
-      <Header search={search} setSearch={setSearch} handleKeyPress={handleKeyPress} />
+      <Header search={search} setSearch={setSearch} handleKeyPress={handleKeyPress} onToggleSidePanel={toggleSidePanel}/>
+      {isOpen && <SidePanel onClose={() => setIsOpen(false)} />}
       {status === 'succeeded' && posts.length === 0 ? (
         <p style={{marginTop: '2rem'}}>No Results Found</p>
       ) : (
