@@ -5,6 +5,8 @@ import PostCard from '../components/PostCard';
 import Header from  '../components/Header';
 import SidePanel from '../components/SidePanel';
 import { fetchPosts, selectPosts, selectPostsStatus, selectPostsError } from '../features/posts/postsSlice';
+import { selectFilter } from '../features/filters/filterSlice';
+import { clearFilter } from '../features/filters/filterSlice';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -13,30 +15,37 @@ export default function Home() {
   const status = useSelector(selectPostsStatus);
   const error = useSelector(selectPostsError);
   const [ search, setSearch ] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
   const [ isOpen, setIsOpen ] = useState(false);
+  const subreddit = useSelector(selectFilter);
   
   const toggleSidePanel = () => {
     setIsOpen(!isOpen);
   }; 
 
-  function handleKeyPress (event) {
-    if (event.key === 'Enter')
-      dispatch(fetchPosts(search))
+  function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+      dispatch(fetchPosts(search));
+      dispatch(clearFilter());
+      setSearch('');
+      setIsSearching(true);
+    }
   }
 
   useEffect(() => {
-    if (status === 'idle') {
+    if (!isSearching) {
       dispatch(fetchPosts());
     }
-  }, [status, dispatch]);
+  }, [subreddit, isSearching, dispatch]);
+
 
   if (status === 'loading') return <div>Loading posts...</div>;
   if (status === 'failed') return <div>Error: {error}</div>;
 
   return (
-    <div>
+    <div style={{ minHeight: '100vh'}}>
       <Header search={search} setSearch={setSearch} handleKeyPress={handleKeyPress} onToggleSidePanel={toggleSidePanel}/>
-      {isOpen && <SidePanel onClose={() => setIsOpen(false)} />}
+      {isOpen && <SidePanel onClose={() => setIsOpen(false)} setIsSearching={setIsSearching} />}
       {status === 'succeeded' && posts.length === 0 ? (
         <p style={{marginTop: '2rem'}}>No Results Found</p>
       ) : (

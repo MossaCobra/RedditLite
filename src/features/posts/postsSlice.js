@@ -1,10 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { selectFilter } from '../filters/filterSlice';
 
-export const fetchPosts = createAsyncThunk('posts/fetchPosts', async (search) => {
-  const url = search 
-    ? `https://www.reddit.com/search.json?q=${encodeURIComponent(search)}` 
-    : 'https://www.reddit.com/r/popular.json';
-    
+export const fetchPosts = createAsyncThunk('posts/fetchPosts', async (search, thunkAPI) => {
+  const state = thunkAPI.getState();
+  const subreddit = selectFilter(state);
+
+  let url;
+  if (search && search.trim() !== '') {
+    url = `https://www.reddit.com/search.json?q=${encodeURIComponent(search)}`;
+  } else if (subreddit && subreddit !== '' && subreddit !== 'all') {
+    url = `https://www.reddit.com/r/${encodeURIComponent(subreddit)}.json`;
+  } else {
+    url = 'https://www.reddit.com/r/popular.json';
+  }
+
   const response = await fetch(url);
   const data = await response.json();
 
