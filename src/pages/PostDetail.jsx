@@ -4,7 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import PostCard from '../components/PostCard';
 import HeaderBack from '../components/Header/Back';
 import Comments from '../components/Article/Comments';
-import { fetchComments, selectComments, selectCommentsStatus, selectCommentsError } from '../features/comments/commentsSlice';
+import {
+  fetchComments,
+  selectComments,
+  selectCommentsStatus,
+  selectCommentsError,
+  resetComments,
+} from '../features/comments/commentsSlice';
 
 export default function PostDetail() {
   const dispatch = useDispatch();
@@ -15,18 +21,13 @@ export default function PostDetail() {
   const error = useSelector(selectCommentsError);
 
   useEffect(() => {
-    if (status === 'idle'){
-      dispatch(fetchComments(post.id))
-    }
-  }, [status, dispatch]) 
-  
-  if (status === 'loading') return <div>Loading comments...</div>;
-  if (status === 'failed') return <div>Error: {error}</div>;
+    if (!post) return;
 
+    dispatch(resetComments());
+    dispatch(fetchComments(post.id));
+  }, [dispatch, post?.id]);
 
-  if (!post) {
-    return <Navigate to="/" />;
-  }
+  if (!post) return <Navigate to="/" />;
 
   return (
     <div>
@@ -41,10 +42,12 @@ export default function PostDetail() {
         score={post.score}
         created_utc={post.created_utc}
         permalink={post.permalink}
-        selftext={post.selftext ? post.selftext : "No description provided"}
+        selftext={post.selftext || "No description provided"}
       />
 
-      {comments?.map((comment) => (
+      {status === 'loading' && <div>Loading comments...</div>}
+      {status === 'failed' && <div>Error: {error}</div>}
+      {status === 'succeeded' && comments?.map((comment) => (
         <Comments key={comment.data.id} comment={comment.data} />
       ))}
     </div>
