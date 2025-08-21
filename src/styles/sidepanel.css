@@ -49,14 +49,14 @@
 .filter-section {
     display: flex;
     flex-direction: column;
-    flex: 1;             /* fill remaining vertical space */
+    flex: 1;
 }
 
 .filter-section label {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    flex: 1;             /* each label takes equal height */
+    flex: 1;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 1rem;
     color: #444;
