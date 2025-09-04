@@ -1,3 +1,4 @@
+// netlify/functions/fetchPosts.js
 export async function handler(event) {
   const { search = '', subreddit = '' } = event.queryStringParameters || {};
 
@@ -14,21 +15,18 @@ export async function handler(event) {
     const response = await fetch(url);
     const text = await response.text();
 
-    console.log('Reddit raw response:', text.slice(0, 200));
-
+    // parse safely
     let data;
     try {
       data = JSON.parse(text);
-    } catch (err) {
-      console.warn('Reddit returned non-JSON, using empty array');
+    } catch {
       data = { data: { children: [] } };
     }
 
     const posts = (data?.data?.children || []).map(child => {
       const postData = child.data;
       let imageUrl = null;
-
-      if (postData.preview?.images?.length > 0) {
+      if (postData.preview?.images?.length) {
         imageUrl = postData.preview.images[0].source.url.replace(/&amp;/g, '&');
       } else if (postData.url?.match(/\.(jpg|png|gif)$/)) {
         imageUrl = postData.url;
@@ -51,15 +49,13 @@ export async function handler(event) {
     return {
       statusCode: 200,
       headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify(posts),
+      body: JSON.stringify(posts), // always string
     };
   } catch (err) {
-    console.error('FetchPosts error:', err);
-
     return {
       statusCode: 200,
       headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify([]),
+      body: JSON.stringify([]), // fallback array
     };
   }
 }
