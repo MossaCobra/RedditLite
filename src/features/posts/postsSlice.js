@@ -5,22 +5,15 @@ export const fetchPosts = createAsyncThunk(
   'posts/fetchPosts',
   async ({ search = '', subreddit = '' } = {}, thunkAPI) => {
     const state = thunkAPI.getState();
-
     const effectiveSearch = search || state.filters.search || '';
-    const effectiveSubreddit = subreddit || selectFilter(state) || '';
+    const effectiveSubreddit = subreddit || state.filters.subreddit || '';
 
-    const params = new URLSearchParams({
-      search: effectiveSearch,
-      subreddit: effectiveSubreddit,
-    });
-
+    const params = new URLSearchParams({ search: effectiveSearch, subreddit: effectiveSubreddit });
     const response = await fetch(`/.netlify/functions/fetchPosts?${params.toString()}`);
     const posts = await response.json();
-
     return posts;
   }
 );
-
 
 
 const postsSlice = createSlice({
