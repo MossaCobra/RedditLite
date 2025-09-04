@@ -5,6 +5,8 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
+    host: true,
+    allowedHosts: ['devserver-netlify-test--redditliteapp.netlify.app'],
     proxy: {
       '/api/reddit': {
         target: 'https://www.reddit.com',
