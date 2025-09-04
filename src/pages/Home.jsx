@@ -24,10 +24,12 @@ export default function Home() {
   const [isSearching, setIsSearching] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const toggleSidePanel = () => setIsOpen(!isOpen);
+  const toggleSidePanel = () => {
+    setIsOpen(!isOpen);
+  };
 
   function handleKeyPress(event) {
-    if (event.key === 'Enter' && search.trim() !== '') {
+    if (event.key === 'Enter') {
       dispatch(fetchPosts({ search }));
       dispatch(clearFilter());
       setSearch('');
@@ -35,19 +37,11 @@ export default function Home() {
     }
   }
 
-  // Fetch posts when subreddit changes or when not in search mode
   useEffect(() => {
     if (!isSearching) {
       dispatch(fetchPosts({ subreddit }));
     }
   }, [subreddit, isSearching, dispatch]);
-
-  // Reset search mode after fetching completes
-  useEffect(() => {
-    if (status === 'succeeded' && isSearching) {
-      setIsSearching(false);
-    }
-  }, [status, isSearching]);
 
   if (status === 'loading') return <div>Loading posts...</div>;
   if (status === 'failed') return <div>Error: {error}</div>;
@@ -68,10 +62,10 @@ export default function Home() {
         />
       )}
 
-      {status === 'succeeded' && posts?.length === 0 ? (
+      {status === 'succeeded' && posts.length === 0 ? (
         <p style={{ marginTop: '2rem' }}>No Results Found</p>
       ) : (
-        posts?.map((post) => (
+        posts.map?.((post) => (
           <PostCard
             key={post.id}
             title={post.title}
