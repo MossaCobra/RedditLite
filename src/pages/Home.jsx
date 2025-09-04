@@ -65,7 +65,7 @@ export default function Home() {
       {status === 'succeeded' && posts.length === 0 ? (
         <p style={{ marginTop: '2rem' }}>No Results Found</p>
       ) : (
-        posts.map((post) => (
+        posts.map?.((post) => (
           <PostCard
             key={post.id}
             title={post.title}
