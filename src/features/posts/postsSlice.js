@@ -7,11 +7,11 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async (search, th
 
   let url;
   if (search && search.trim() !== '') {
-    url = `https://www.reddit.com/search.json?q=${encodeURIComponent(search)}`;
+    url = `/api/reddit/search.json?q=${encodeURIComponent(search)}`;
   } else if (subreddit && subreddit !== '' && subreddit !== 'all') {
-    url = `https://www.reddit.com/r/${encodeURIComponent(subreddit)}.json`;
+    url = `/api/reddit/r/${encodeURIComponent(subreddit)}.json`;
   } else {
-    url = 'https://www.reddit.com/r/popular.json';
+    url = '/api/reddit/r/popular.json';
   }
 
   const response = await fetch(url);
