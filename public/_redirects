@@ -1,3 +1,4 @@
 /api/reddit/*  https://www.reddit.com/:splat  200!
+/*    /index.html   200
 
 
