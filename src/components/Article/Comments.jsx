@@ -10,7 +10,7 @@ function Comments({ comment }) {
       <p style={{ fontSize: '0.9rem', color: '#555', marginBottom: '0.25rem' }}>
         <strong>u/{author}</strong> • {date} • {score} points
       </p>
-      <p style={{ margin: 0 }}>{body}</p>
+      <p style={{ margin: 0, wordWrap: "break-word", overflowWrap: "break-word", wordBreak: "break-all"}}>{body}</p>
     </section>
   );
 }
