@@ -23,11 +23,11 @@ exports.handler = async (event) => {
   
   let url;
   if (search.trim() !== '') {
-    url = `https://www.reddit.com/search.json?q=${encodeURIComponent(search)}&raw_json=1`;
+    url = `https://www.reddit.com/search.json?q=${encodeURIComponent(search)}`;
   } else if (subreddit && subreddit !== 'all') {
-    url = `https://www.reddit.com/r/${encodeURIComponent(subreddit)}.json?raw_json=1`;
+    url = `https://www.reddit.com/r/${encodeURIComponent(subreddit)}`;
   } else {
-    url = 'https://www.reddit.com/r/popular.json?raw_json=1';
+    url = 'https://www.reddit.com/r/popular.json';
   }
   
   console.log('Fetching from Reddit URL:', url);
