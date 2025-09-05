@@ -7,24 +7,21 @@ export const fetchPosts = createAsyncThunk(
     const state = getState();
     const subreddit = selectFilter(state);
 
-    let url;
-    if (search && search.trim() !== '') {
-      url = `https://www.reddit.com/search.json?q=${encodeURIComponent(search)}`;
-    } else if (subreddit && subreddit !== '' && subreddit !== 'all') {
-      url = `https://www.reddit.com/r/${encodeURIComponent(subreddit)}.json`;
-    } else {
-      url = 'https://www.reddit.com/r/popular.json';
-    }
-
     try {
+      let url;
+      if (search && search.trim() !== '') {
+        url = `/.netlify/functions/reddit-proxy?path=search&search=${encodeURIComponent(search)}`;
+      } else if (subreddit && subreddit !== '' && subreddit !== 'all') {
+        url = `/.netlify/functions/reddit-proxy?path=${encodeURIComponent(subreddit)}`;
+      } else {
+        url = `/.netlify/functions/reddit-proxy?path=popular`;
+      }
+
       const response = await fetch(url, {
+        method: 'GET',
         headers: {
-          'User-Agent': 'RedditLiteApp/1.0 by YourUsername',
-          'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        mode: 'cors',
-        signal: AbortSignal.timeout(10000),
       });
 
       if (!response.ok) {
