@@ -1,6 +1,8 @@
 // netlify/functions/fetchComments.js
 
 exports.handler = async (event) => {
+  console.log('fetchComments function called with params:', event.queryStringParameters);
+  
   // CORS headers
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -21,6 +23,7 @@ exports.handler = async (event) => {
   const { postId } = event.queryStringParameters || {};
   
   if (!postId) {
+    console.log('No postId provided');
     return {
       statusCode: 200,
       headers,
@@ -28,11 +31,22 @@ exports.handler = async (event) => {
     };
   }
   
+  const url = `https://www.reddit.com/comments/${postId}.json?raw_json=1`;
+  console.log('Fetching comments from:', url);
+  
   try {
-    const response = await fetch(`https://www.reddit.com/comments/${postId}.json`);
+    // Add User-Agent header for Reddit API
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'RedditLite/1.0.0',
+      }
+    });
+    
+    console.log('Reddit API response status:', response.status);
     
     if (!response.ok) {
-      console.error(`Reddit API error: ${response.status}`);
+      const errorText = await response.text();
+      console.error(`Reddit API error: ${response.status}`, errorText);
       return {
         statusCode: 200,
         headers,
@@ -41,16 +55,23 @@ exports.handler = async (event) => {
     }
     
     const text = await response.text();
-    let data;
+    console.log('Response text length:', text.length);
     
+    let data;
     try {
       data = JSON.parse(text);
     } catch (parseError) {
       console.error('Error parsing Reddit response:', parseError);
-      data = [{ data: { children: [] } }, { data: { children: [] } }];
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify([]),
+      };
     }
     
+    // Reddit returns an array where [0] is the post and [1] contains comments
     const comments = data[1]?.data?.children || [];
+    console.log(`Successfully fetched ${comments.length} comments`);
     
     return {
       statusCode: 200,
@@ -58,7 +79,7 @@ exports.handler = async (event) => {
       body: JSON.stringify(comments),
     };
   } catch (error) {
-    console.error('Error fetching comments:', error);
+    console.error('Unexpected error in fetchComments:', error.message, error.stack);
     return {
       statusCode: 200,
       headers,

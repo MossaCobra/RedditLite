@@ -1,5 +1,5 @@
+// src/features/posts/postsSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { selectFilter } from '../filters/filterSlice';
 
 export const fetchPosts = createAsyncThunk(
   'posts/fetchPosts',
@@ -7,11 +7,26 @@ export const fetchPosts = createAsyncThunk(
     const state = thunkAPI.getState();
     const effectiveSearch = search || state.filters.search || '';
     const effectiveSubreddit = subreddit || state.filters.subreddit || '';
-
     const params = new URLSearchParams({ search: effectiveSearch, subreddit: effectiveSubreddit });
+    
     const response = await fetch(`/.netlify/functions/fetchPosts?${params.toString()}`);
-    const posts = await response.json();
-    return posts;
+    
+    if (!response.ok) {
+      throw new Error(`Server responded with ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    if (data && data.error) {
+      console.error('Function returned error:', data.error);
+      return data.posts || [];
+    }
+    
+    if (Array.isArray(data)) {
+      return data;
+    }
+    
+    return [];
   }
 );
 
@@ -43,5 +58,4 @@ const postsSlice = createSlice({
 export const selectPosts = state => state.posts.posts;
 export const selectPostsStatus = state => state.posts.status;
 export const selectPostsError = state => state.posts.error;
-
 export default postsSlice.reducer;
