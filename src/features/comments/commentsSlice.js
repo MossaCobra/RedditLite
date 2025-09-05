@@ -4,33 +4,27 @@ export const fetchComments = createAsyncThunk(
   'comments/fetchComments',
   async (postId, { rejectWithValue }) => {
     try {
-      const response = await fetch(`https://www.reddit.com/comments/${postId}.json`, {
-        headers: {
-          'User-Agent': 'RedditLiteApp/1.0 by YourUsername',
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        mode: 'cors',
-        signal: AbortSignal.timeout(10000),
-      });
+      const response = await fetch(`/.netlify/functions/reddit-proxy?path=comments/${postId}`);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-      
-      if (!data || !Array.isArray(data) || data.length < 2) {
-        throw new Error('Invalid Reddit API response structure');
+
+      if (!Array.isArray(data) || data.length < 2 || !data[1].data?.children) {
+        return [];
       }
 
       return data[1].data.children;
+
     } catch (error) {
       console.error('Failed to fetch comments:', error);
       return rejectWithValue(error.message);
     }
   }
 );
+
 
 const commentsSlice = createSlice({
   name: 'comments',
