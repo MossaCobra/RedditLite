@@ -1,6 +1,5 @@
+// netlify/functions/reddit.mjs
 export const handler = async (event, context) => {
-  console.log('Reddit proxy called:', event.queryStringParameters);
-
   // Handle CORS preflight requests
   if (event.httpMethod === 'OPTIONS') {
     return {
@@ -28,39 +27,31 @@ export const handler = async (event, context) => {
       redditUrl = `https://www.reddit.com/r/${path}.json?limit=25`;
     }
 
-    console.log('Fetching:', redditUrl);
-
+    // Minimal headers — replace YOUR_REDDIT_USERNAME with your real Reddit username
     const response = await fetch(redditUrl, {
       headers: {
-        "User-Agent": "web:redditlite:v1.0 (by /u/yourusername)",
-        "Accept": "application/json"
+        'User-Agent': 'web:redditlite:v1.0 (by /u/No-Pollution6590)',
+        'Accept': 'application/json',
       },
     });
 
-    console.log('Response status:', response.status);
-
     if (!response.ok) {
-      if (response.status === 403) {
-        throw new Error('Reddit blocked the request. This might be due to rate limiting or blocked User-Agent.');
-      }
       throw new Error(`Reddit API error: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
-    
+
     return {
       statusCode: 200,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
-        'Cache-Control': 'public, max-age=300',
+        'Cache-Control': 'public, max-age=300', 
       },
       body: JSON.stringify(data),
     };
-
   } catch (error) {
     console.error('Reddit proxy error:', error.message);
-    
     return {
       statusCode: 500,
       headers: {
