@@ -11,7 +11,7 @@
 - Cypress
 - Vite
 
-## 📐 Wireframes / Screenshots
+## 📐 Wireframes / Screenshots - Figma
 ![Homepage](./Wireframe/Prev1.png)
 ![Comments view](./Wireframe/Prev2.png)
 
